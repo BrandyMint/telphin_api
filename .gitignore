@@ -1,0 +1,10 @@
+*.gem
+.bundle
+Gemfile.lock
+pkg/*
+tmp/*
+.yardoc/*
+.idea
+spec/support/credentials.yml
+doc/
+*.iml
