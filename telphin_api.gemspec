@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.version     = TelphinApi::VERSION
   s.authors     = ['Tyutyunnikov Konstantin']
   s.email       = ['mrootooz@gmail.com']
-  # s.homepage    = 'http://7even.github.com/telphin_api'
   s.summary     = %q{Ruby wrapper for Telphin API}
   s.description = %q{A transparent wrapper for Telphin API. Supports ruby-way naming of API methods (without method lists inside), optional authorization, files uploading, logging and any faraday-supported http adapter of your choice.}
   s.license     = 'MIT'
