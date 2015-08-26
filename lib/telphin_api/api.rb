@@ -18,18 +18,15 @@ module TelphinApi
 
         user_id = args.delete(:user_id)
         extension_number = args.delete(:extension_number)
+
         id = args.delete(:id)
+        url = [namespace, user_id, extension_number, action].join('/')
+        url = url + '/' + id unless id.nil?
 
         flat_arguments = Utils.flatten_arguments(args)
-        url = [TelphinApi.site, namespace, user_id, extension_number, action].join('/')
-        url = url + '/' + id unless id.nil?
-        connection = connection(url: url, token: token)
+        flat_arguments = flat_arguments.to_json.to_s if http_method == :post
 
-        if flat_arguments.empty?
-          connection.send(http_method).body
-        else
-          connection.send(http_method, flat_arguments).body
-        end
+        connection(url: TelphinApi.site, token: token, method: http_method).send(http_method, url, flat_arguments).body
       end
 
       # Faraday connection.
@@ -40,9 +37,14 @@ module TelphinApi
       def connection(options = {})
         url = options.delete(:url)
         token = options.delete(:token)
-        url = url + '?accessRequestToken=' + token
+        method = options.delete(:method)
 
         Faraday.new(url, TelphinApi.faraday_options) do |builder|
+          builder.headers['Authorization'] = "Bearer #{token}"
+          if method == :post
+            builder.headers['Content-Type'] = 'application/json'
+          end
+
           builder.request :multipart
           builder.request :url_encoded
           builder.request :retry, TelphinApi.max_retries
