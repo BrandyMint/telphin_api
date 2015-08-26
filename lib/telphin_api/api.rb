@@ -13,7 +13,7 @@ module TelphinApi
         namespace = full_method.first
         action = full_method.last
 
-        http_method = args.delete(:method)
+        http_method = args.delete(:http_method)
         http_method ||= :get
 
         user_id = args.delete(:user_id)
