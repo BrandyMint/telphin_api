@@ -24,7 +24,7 @@ module TelphinApi
         url = url + '/' + id unless id.nil?
 
         flat_arguments = Utils.flatten_arguments(args)
-        flat_arguments = flat_arguments.to_json.to_s if http_method == :post
+        flat_arguments = flat_arguments.to_json.to_s if [:post, :put].include? http_method
 
         connection(url: TelphinApi.site, token: token, method: http_method).send(http_method, url, flat_arguments).body
       end
@@ -41,9 +41,7 @@ module TelphinApi
 
         Faraday.new(url, TelphinApi.faraday_options) do |builder|
           builder.headers['Authorization'] = "Bearer #{token}"
-          if method == :post
-            builder.headers['Content-Type'] = 'application/json'
-          end
+          builder.headers['Content-Type'] = 'application/json' if [:post, :put].include? method
 
           builder.request :multipart
           builder.request :url_encoded
