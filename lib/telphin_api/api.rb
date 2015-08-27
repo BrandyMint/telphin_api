@@ -19,9 +19,9 @@ module TelphinApi
         user_id = args.delete(:user_id)
         extension_number = args.delete(:extension_number)
 
-        id = args.delete(:id)
-        url = [namespace, user_id, extension_number, action].join('/')
-        url = url + '/' + id unless id.nil?
+        url_options = args.delete(:url_options)
+        url_options ||= []
+        url = [namespace, user_id, extension_number, action].concat(url_options).join('/')
 
         flat_arguments = Utils.flatten_arguments(args)
         flat_arguments = flat_arguments.to_json.to_s if [:post, :put].include? http_method
